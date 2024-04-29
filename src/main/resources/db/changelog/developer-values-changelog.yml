@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-developer-data
+      author: Alex
+      changes:
+        - sqlFile:
+            path: ../developer-data.sql
+            relativeToChangelogFile: true
+            endDelimiter: ";"
+            splitStatements: true

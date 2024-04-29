@@ -1,0 +1,91 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-developer-table
+      author: Alex
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_developer
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                    unique: true
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  name: location
+                  type: VARCHAR(255)
+              - column:
+                  name: year_founded
+                  type: INT
+              - column:
+                  name: number_of_employees
+                  type: INT
+            tableName: developer
+  - changeSet:
+      id: create-game-table
+      author: Alex
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_game
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: title
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: developer_id
+                  type: BIGINT
+              - column:
+                  name: year_released
+                  type: INT
+              - column:
+                  name: genre
+                  type: VARCHAR(255)
+            tableName: game
+  - changeSet:
+      id: add-foreign-key
+      author: Alex
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: developer_id
+            baseTableName: game
+            constraintName: FK_GAME_ON_DEVELOPER
+            referencedColumnNames: id
+            referencedTableName: developer
+  - changeSet:
+      id: add-indexes
+      author: Alex
+      changes:
+        - createIndex:
+            indexName: idx_developer_id
+            tableName: game
+            columns:
+              - column:
+                  name: developer_id
+        - createIndex:
+            indexName: idx_year_released
+            tableName: game
+            columns:
+              - column:
+                  name: year_released

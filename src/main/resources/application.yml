@@ -1,0 +1,16 @@
+spring:
+  liquibase:
+    change-log: classpath:db\changelog\master-changelog.yml
+  datasource:
+    url: jdbc:postgresql://localhost:5432/videogames
+    username: postgres
+    password: password
+    name: videogames
+  jpa:
+    hibernate:
+      ddl-auto: none
+server:
+  error:
+    include-message: always
+    include-stacktrace: never
+
