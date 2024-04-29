@@ -1,6 +1,6 @@
 package dev.profitsoft.videogames.mapper;
 
-import dev.profitsoft.videogames.dto.developerDTOs.DeveloperDTO;
+import dev.profitsoft.videogames.dto.developer.DeveloperDTO;
 import dev.profitsoft.videogames.entity.DeveloperEntity;
 import org.mapstruct.Mapper;
 

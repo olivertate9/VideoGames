@@ -1,10 +1,10 @@
 package dev.profitsoft.videogames.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.profitsoft.videogames.dto.gameDTOs.*;
+import dev.profitsoft.videogames.dto.game.*;
 import dev.profitsoft.videogames.entity.DeveloperEntity;
 import dev.profitsoft.videogames.entity.GameEntity;
-import dev.profitsoft.videogames.exception.FileUploadException;
+import dev.profitsoft.videogames.exception.FileParsingException;
 import dev.profitsoft.videogames.exception.NotFoundException;
 import dev.profitsoft.videogames.mapper.GameMapper;
 import dev.profitsoft.videogames.repository.GameRepository;
@@ -86,7 +86,7 @@ public class GameService {
             response.getOutputStream().write(sb.toString().getBytes());
             response.getOutputStream().flush();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new FileParsingException(e.getMessage());
         }
     }
 
@@ -129,7 +129,7 @@ public class GameService {
             return objectMapper.readerForListOf(GameUpdateDTO.class)
                     .readValue(bufferedInputStream);
         } catch (IOException e) {
-            throw new FileUploadException(e.getMessage());
+            throw new FileParsingException(e.getMessage());
         }
     }
 

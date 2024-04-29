@@ -1,4 +1,4 @@
-package dev.profitsoft.videogames.dto.gameDTOs;
+package dev.profitsoft.videogames.dto.game;
 
 import dev.profitsoft.videogames.entity.DeveloperEntity;
 import lombok.Builder;

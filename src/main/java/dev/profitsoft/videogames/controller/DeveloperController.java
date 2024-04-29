@@ -1,7 +1,7 @@
 package dev.profitsoft.videogames.controller;
 
-import dev.profitsoft.videogames.dto.developerDTOs.DeveloperDTO;
-import dev.profitsoft.videogames.dto.responseDTOs.RestResponse;
+import dev.profitsoft.videogames.dto.developer.DeveloperDTO;
+import dev.profitsoft.videogames.dto.response.RestResponse;
 import dev.profitsoft.videogames.service.DeveloperService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

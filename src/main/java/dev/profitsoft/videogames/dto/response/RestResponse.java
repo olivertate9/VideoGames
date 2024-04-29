@@ -1,4 +1,4 @@
-package dev.profitsoft.videogames.dto.responseDTOs;
+package dev.profitsoft.videogames.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,6 +1,7 @@
 package dev.profitsoft.videogames.controller;
 
-import dev.profitsoft.videogames.dto.responseDTOs.ErrorResponse;
+import dev.profitsoft.videogames.dto.response.ErrorResponse;
+import dev.profitsoft.videogames.exception.FileParsingException;
 import dev.profitsoft.videogames.exception.NotFoundException;
 import dev.profitsoft.videogames.exception.UniqueValueException;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,13 @@ public class ExceptionControllerAdvice {
         return buildErrorResponse(HttpStatus.CONFLICT, e.getMessage());
     }
 
+    @ExceptionHandler(FileParsingException.class)
+    public ResponseEntity<ErrorResponse> exceptionParsingHandler(FileParsingException e) {
+        return buildErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
+    }
+
     private ResponseEntity<ErrorResponse> buildErrorResponse(HttpStatus status, String message) {
+
         return ResponseEntity.status(status).body(ErrorResponse.builder()
                 .status(status.value())
                 .message(message)

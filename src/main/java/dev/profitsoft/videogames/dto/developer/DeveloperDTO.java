@@ -1,4 +1,4 @@
-package dev.profitsoft.videogames.dto.developerDTOs;
+package dev.profitsoft.videogames.dto.developer;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;

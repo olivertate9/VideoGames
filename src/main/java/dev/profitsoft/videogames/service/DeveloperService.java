@@ -1,6 +1,6 @@
 package dev.profitsoft.videogames.service;
 
-import dev.profitsoft.videogames.dto.developerDTOs.DeveloperDTO;
+import dev.profitsoft.videogames.dto.developer.DeveloperDTO;
 import dev.profitsoft.videogames.entity.DeveloperEntity;
 import dev.profitsoft.videogames.exception.NotFoundException;
 import dev.profitsoft.videogames.exception.UniqueValueException;
