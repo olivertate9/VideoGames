@@ -32,4 +32,6 @@ public interface GameRepository extends JpaRepository<GameEntity, Long> {
             AND (?2 IS NULL OR g.yearReleased = ?2)
             """)
     List<GameEntity> findAllForReport(Long developerId, Integer yearReleased);
+
+    GameEntity findByTitle(String title);
 }

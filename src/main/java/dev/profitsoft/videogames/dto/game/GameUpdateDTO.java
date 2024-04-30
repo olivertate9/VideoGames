@@ -1,6 +1,7 @@
 package dev.profitsoft.videogames.dto.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,6 +21,7 @@ public class GameUpdateDTO {
     @NotBlank(message = "developerName is required")
     private String developerName;
 
+    @Max(value = 2024)
     private int yearReleased;
     private String genre;
 }

@@ -20,7 +20,6 @@ public class GameController {
     private final GameService gameService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<GameUpdateDTO> addGame(@Valid @RequestBody GameUpdateDTO gameUpdateDto) {
         GameUpdateDTO savedGame = gameService.saveGame(gameUpdateDto);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -52,14 +51,14 @@ public class GameController {
     }
 
     @PostMapping(value = "/_report", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @ResponseStatus(HttpStatus.OK)
     public void generateReport(@RequestBody GameSearchDTO gameSearchDTO, HttpServletResponse response) {
         gameService.generateReport(gameSearchDTO, response);
     }
 
     @PostMapping("/upload")
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<GameUploadDTO> uploadFromFile(@RequestParam("file") MultipartFile multipart) {
         GameUploadDTO gameUploadDTO = gameService.uploadFromFile(multipart);
-        return ResponseEntity.ok().body(gameUploadDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(gameUploadDTO);
     }
 }
