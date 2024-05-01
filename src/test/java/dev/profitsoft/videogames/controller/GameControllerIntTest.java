@@ -6,6 +6,7 @@ import dev.profitsoft.videogames.dto.game.GameDTO;
 import dev.profitsoft.videogames.dto.game.GameInfoDTO;
 import dev.profitsoft.videogames.dto.game.GameListDTO;
 import dev.profitsoft.videogames.dto.game.GameUploadDTO;
+import dev.profitsoft.videogames.dto.response.ErrorResponse;
 import dev.profitsoft.videogames.dto.response.RestResponse;
 import dev.profitsoft.videogames.entity.DeveloperEntity;
 import dev.profitsoft.videogames.entity.GameEntity;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
@@ -98,12 +100,12 @@ class GameControllerIntTest {
     @Test
     void testAddGameValidateRequiredFields() throws Exception {
         String requestBody = """
-            {
-                "developerName": "%s",
-                "yearReleased": %d,
-                "genre": "%s"
-            }
-            """.formatted(DEVELOPER_NAME, YEAR_RELEASED, GENRE);
+                {
+                    "developerName": "%s",
+                    "yearReleased": %d,
+                    "genre": "%s"
+                }
+                """.formatted(DEVELOPER_NAME, YEAR_RELEASED, GENRE);
 
         mvc.perform(post("/api/game")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -115,13 +117,13 @@ class GameControllerIntTest {
     @Test
     void testAddGameValidateInvalidData() throws Exception {
         String requestBody = """
-            {
-                "title": "Test Title",
-                "developerName": "%s",
-                "yearReleased": %d,
-                "genre": "InvalidGenre"
-            }
-            """.formatted(DEVELOPER_NAME, 2030);
+                {
+                    "title": "Test Title",
+                    "developerName": "%s",
+                    "yearReleased": %d,
+                    "genre": "InvalidGenre"
+                }
+                """.formatted(DEVELOPER_NAME, 2030);
 
         mvc.perform(post("/api/game")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -129,7 +131,6 @@ class GameControllerIntTest {
                 .andExpect(status().isBadRequest())
                 .andReturn();
     }
-
 
     @Test
     void testGetGame() throws Exception {
@@ -147,6 +148,15 @@ class GameControllerIntTest {
         assertThat(gameDTO).isNotNull();
         assertThat(gameDTO.getTitle()).isEqualTo(savedGame.getTitle());
         assertThat(gameDTO.getYearReleased()).isEqualTo(savedGame.getYearReleased());
+    }
+
+    @Test
+    void testGetGameWithNonExistentId() throws Exception {
+        Long nonExistentId = 999L;
+
+        mvc.perform(get("/api/game/{id}", nonExistentId))
+                .andExpect(status().isNotFound())
+                .andReturn();
     }
 
     @Test
@@ -176,6 +186,43 @@ class GameControllerIntTest {
     }
 
     @Test
+    void testUpdateGameMissingValues() throws Exception {
+        Long id = savedGame.getId();
+        String requestBody = """
+                {
+                    "developerName": "%s",
+                    "yearReleased": %d,
+                    "genre": "%s"
+                }
+                """.formatted(DEVELOPER_NAME, YEAR_RELEASED, GENRE);
+
+        mvc.perform(put("/api/game/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+    }
+
+    @Test
+    void testUpdateGameNonExistentId() throws Exception {
+        Long nonExistentId = 999L;
+        String requestBody = """
+                {
+                    "title": "Test Title",
+                    "developerName": "%s",
+                    "yearReleased": %d,
+                    "genre": "%s"
+                }
+                """.formatted(DEVELOPER_NAME, YEAR_RELEASED, GENRE);
+
+        mvc.perform(put("/api/game/{id}", nonExistentId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isNotFound())
+                .andReturn();
+    }
+
+    @Test
     void testDeleteGame() throws Exception {
         Long id = savedGame.getId();
 
@@ -188,6 +235,15 @@ class GameControllerIntTest {
 
         assertThat(restResponse).isNotNull();
         assertThat(restResponse.getResponse()).isEqualTo("Game deleted");
+    }
+
+    @Test
+    void testDeleteGameNonExistentId() throws Exception {
+        Long nonExistentId = 999L;
+
+        mvc.perform(delete("/api/game/{id}", nonExistentId))
+                .andExpect(status().isNotFound())
+                .andReturn();
     }
 
     @Test
@@ -214,6 +270,30 @@ class GameControllerIntTest {
         assertThat(listDTO).isNotNull();
         assertThat(listDTO.getGames().get(0).getTitle()).isEqualTo(infoDTO.getTitle());
         assertThat(listDTO.getTotalPages()).isEqualTo(1);
+    }
+
+    @Test
+    void testFindGamesListEmpty() throws Exception {
+        gameRepository.deleteAll();
+        String requestBody = """
+                {
+                    "yearReleased": %d,
+                    "developerName": "NonExistentDeveloper",
+                    "page": 1,
+                    "size": 10
+                }
+                """.formatted(YEAR_RELEASED);
+
+        MvcResult result = mvc.perform(post("/api/game/_list")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+        GameListDTO listDTO = objectMapper.readValue(content, GameListDTO.class);
+
+        assertThat(listDTO.getGames()).size().isZero();
     }
 
     @Test
@@ -245,12 +325,33 @@ class GameControllerIntTest {
 
     }
 
+    @Test
+    void testGenerateReportIsEmpty() throws Exception {
+        gameRepository.deleteAll();
+
+        String requestBody = """
+                {
+                    "yearReleased": %d,
+                    "developerName": "NonExistentDeveloper"
+                }
+                """.formatted(YEAR_RELEASED);
+        String defaultResponse = "Title;Genre\n";
+        MvcResult result = mvc.perform(post("/api/game/_report")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        byte[] content = result.getResponse().getContentAsByteArray();
+        assertThat(content).isEqualTo(defaultResponse.getBytes());
+    }
+
     @ParameterizedTest
     @CsvSource(delimiterString = ";", value = {
             "The Legend of Zelda: Breath of the Wild;Nintendo;2017;Action, Adventure",
             "Super Mario Odyssey;Nintendo;2017;Platformer"
     })
-    void shouldUploadFromFile(String title, String developerName, int yearReleased, String genre) throws Exception {
+    void testUploadFromFile(String title, String developerName, int yearReleased, String genre) throws Exception {
         String json = """
                 [
                   {
@@ -273,6 +374,48 @@ class GameControllerIntTest {
         assertThat(uploadDTO).isNotNull();
         assertThat(uploadDTO.getFailUploads()).isZero();
         assertThat(uploadDTO.getSuccessUploads()).isEqualTo(1);
+    }
+
+    @Test
+    void testUploadEmptyFile() throws Exception {
+        MockMultipartFile file = new MockMultipartFile("file", "".getBytes());
+
+        MvcResult result = mvc.perform(multipart("/api/game/upload")
+                        .file(file))
+                .andExpect(status().isUnprocessableEntity())
+                .andReturn();
+
+        ErrorResponse error = objectMapper.readValue(result.getResponse().getContentAsString(), ErrorResponse.class);
+
+        assertThat(error).isNotNull();
+        assertThat(error.getStatus()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY.value());
+        assertThat(error.getDescription()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase());
+    }
+
+    @Test
+    void testUploadInvalidFields() throws Exception {
+        String json = """
+                [
+                  {
+                    "title": "Test Game",
+                    "developerName": "Developer",
+                    "yearReleased": 2030,
+                    "genre": "InvalidGenre"
+                  }
+                ]
+                """;
+        MockMultipartFile file = new MockMultipartFile("file", json.getBytes());
+
+        MvcResult result = mvc.perform(multipart("/api/game/upload")
+                        .file(file))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        GameUploadDTO uploadDTO = objectMapper.readValue(result.getResponse().getContentAsString(), GameUploadDTO.class);
+
+        assertThat(uploadDTO).isNotNull();
+        assertThat(uploadDTO.getFailUploads()).isEqualTo(1);
+        assertThat(uploadDTO.getSuccessUploads()).isZero();
     }
 }
 
