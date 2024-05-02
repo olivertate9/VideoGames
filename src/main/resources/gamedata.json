@@ -1,0 +1,602 @@
+[
+  {
+    "title": "The Legend of Zelda: Breath of the Wild",
+    "developerName": "Nintendo",
+    "yearReleased": 2017,
+    "genre": "Action, Adventure"
+  },
+  {
+    "title": "Grand Theft Auto V",
+    "developerName": "Rockstar Games",
+    "yearReleased": 2013,
+    "genre": "Action-Adventure"
+  },
+  {
+    "title": "Assassin's Creed Odyssey",
+    "developerName": "Ubisoft",
+    "yearReleased": 2018,
+    "genre": "Action, Adventure"
+  },
+  {
+    "title": "Overwatch",
+    "developerName": "Blizzard Entertainment",
+    "yearReleased": 2016,
+    "genre": "First-Person Shooter"
+  },
+  {
+    "title": "Apex Legends",
+    "developerName": "Electronic Arts (EA)",
+    "yearReleased": 2019,
+    "genre": "Battle Royale"
+  },
+  {
+    "title": "Final Fantasy XV",
+    "developerName": "Square Enix",
+    "yearReleased": 2016,
+    "genre": "Action, Role-Playing"
+  },
+  {
+    "title": "The Witcher 3: Wild Hunt",
+    "developerName": "CD Projekt Red",
+    "yearReleased": 2015,
+    "genre": "Action, Role-Playing"
+  },
+  {
+    "title": "Uncharted 4: A Thief's End",
+    "developerName": "Naughty Dog",
+    "yearReleased": 2016,
+    "genre": "Action-Adventure"
+  },
+  {
+    "title": "Monster Hunter: World",
+    "developerName": "Capcom",
+    "yearReleased": 2018,
+    "genre": "Action, Role-Playing"
+  },
+  {
+    "title": "Fallout 4",
+    "developerName": "Bethesda Game Studios",
+    "yearReleased": 2015,
+    "genre": "Action, Role-Playing"
+  },
+  {
+    "title": "Mass Effect 2",
+    "developerName": "BioWare",
+    "yearReleased": 2010,
+    "genre": "Action, Role-Playing"
+  },
+  {
+    "title": "Destiny 2",
+    "developerName": "Bungie",
+    "yearReleased": 2017,
+    "genre": "First-Person Shooter"
+  },
+  {
+    "title": "Fortnite",
+    "developerName": "Epic Games",
+    "yearReleased": 2017,
+    "genre": "Battle Royale"
+  },
+  {
+    "title": "Borderlands 3",
+    "developerName": "Gearbox Software",
+    "yearReleased": 2019,
+    "genre": "First-Person Shooter"
+  },
+  {
+    "title": "Metal Gear Solid V: The Phantom Pain",
+    "developerName": "Konami",
+    "yearReleased": 2015,
+    "genre": "Action, Stealth"
+  },
+  {
+    "title": "Divinity: Original Sin 2",
+    "developerName": "Larian Studios",
+    "yearReleased": 2017,
+    "genre": "Role-Playing"
+  },
+  {
+    "title": "Star Wars: Knights of the Old Republic",
+    "developerName": "LucasArts",
+    "yearReleased": 2003,
+    "genre": "Role-Playing"
+  },
+  {
+    "title": "Minecraft",
+    "developerName": "Mojang Studios",
+    "yearReleased": 2011,
+    "genre": "Sandbox, Survival"
+  },
+  {
+    "title": "Fallout: New Vegas",
+    "developerName": "Obsidian Entertainment",
+    "yearReleased": 2010,
+    "genre": "Action, Role-Playing"
+  },
+  {
+    "title": "Nier: Automata",
+    "developerName": "PlatinumGames",
+    "yearReleased": 2017,
+    "genre": "Action, Role-Playing"
+  },
+  {
+    "title": "League of Legends",
+    "developerName": "Riot Games",
+    "yearReleased": 2009,
+    "genre": "Multiplayer Online Battle Arena"
+  },
+  {
+    "title": "Persona 5",
+    "developerName": "Sega",
+    "yearReleased": 2016,
+    "genre": "Role-Playing"
+  },
+  {
+    "title": "Ghost of Tsushima",
+    "developerName": "Sucker Punch Productions",
+    "yearReleased": 2020,
+    "genre": "Action-Adventure"
+  },
+  {
+    "title": "Call of Duty: Black Ops III",
+    "developerName": "Treyarch",
+    "yearReleased": 2015,
+    "genre": "First-Person Shooter"
+  },
+  {
+    "title": "Forza Motorsport 7",
+    "developerName": "Turn 10 Studios",
+    "yearReleased": 2017,
+    "genre": "Racing"
+  },
+  {
+    "title": "Counter-Strike: Global Offensive",
+    "developerName": "Valve Corporation",
+    "yearReleased": 2012,
+    "genre": "First-Person Shooter"
+  },
+  {
+    "title": "Middle-earth: Shadow of Mordor",
+    "developerName": "Warner Bros. Interactive Entertainment",
+    "yearReleased": 2014,
+    "genre": "Action, Adventure"
+  },
+  {
+    "title": "Halo 5: Guardians",
+    "developerName": "343 Industries",
+    "yearReleased": 2015,
+    "genre": "First-Person Shooter"
+  },
+  {
+    "title": "Mafia III",
+    "developerName": "Hangar 13",
+    "yearReleased": 2016,
+    "genre": "Action-Adventure"
+  },
+  {
+    "title": "Marvel's Spider-Man",
+    "developerName": "Insomniac Games",
+    "yearReleased": 2018,
+    "genre": "Action-Adventure"
+  },
+  {
+    "title": "Death Stranding",
+    "developerName": "Kojima Productions",
+    "yearReleased": 2019,
+    "genre": "Action, Adventure"
+  },
+  {
+    "title": "Middle-earth: Shadow of War",
+    "developerName": "Monolith Productions",
+    "yearReleased": 2017,
+    "genre": "Action, Adventure"
+  },
+  {
+    "title": "Risen 3: Titan Lords",
+    "developerName": "Piranha Games",
+    "yearReleased": 2014,
+    "genre": "Action, Role-Playing"
+  },
+  {
+    "title": "Apex Legends",
+    "developerName": "Respawn Entertainment",
+    "yearReleased": 2019,
+    "genre": "Battle Royale"
+  },
+  {
+    "title": "God of War",
+    "developerName": "Santa Monica Studio",
+    "yearReleased": 2018,
+    "genre": "Action-Adventure"
+  },
+  {
+    "title": "Back 4 Blood",
+    "developerName": "Turtle Rock Studios",
+    "yearReleased": 2021,
+    "genre": "First-Person Shooter"
+  },
+  {
+    "title": "Shantae: Half-Genie Hero",
+    "developerName": "WayForward Technologies",
+    "yearReleased": 2016,
+    "genre": "Platformer"
+  },
+  {
+    "title": "Shovel Knight",
+    "developerName": "Yacht Club Games",
+    "yearReleased": 2014,
+    "genre": "Platformer"
+  },
+  {
+    "title": "The Elder Scrolls Online",
+    "developerName": "Zenimax Online Studios",
+    "yearReleased": 2014,
+    "genre": "Massively Multiplayer Online RPG"
+  },
+  {
+    "title": "Horizon Zero Dawn",
+    "developerName": "Guerrilla Games",
+    "yearReleased": 2017,
+    "genre": "Action, Role-Playing"
+  },
+  {
+    "title": "Forza Horizon 5",
+    "developerName": "Playground Games",
+    "yearReleased": 2021,
+    "genre": "Racing"
+  },
+  {
+    "title": "Total War: Warhammer III",
+    "developerName": "The Creative Assembly",
+    "yearReleased": 2022,
+    "genre": "Strategy"
+  },
+  {
+    "title": "No Man's Sky",
+    "developerName": "Hello Games",
+    "yearReleased": 2016,
+    "genre": "Survival, Exploration"
+  },
+  {
+    "title": "The Sims 4",
+    "developerName": "Maxis",
+    "yearReleased": 2014,
+    "genre": "Life Simulation"
+  },
+  {
+    "title": "Control",
+    "developerName": "Remedy Entertainment",
+    "yearReleased": 2019,
+    "genre": "Action-Adventure"
+  },
+  {
+    "title": "Dreams",
+    "developerName": "Media Molecule",
+    "yearReleased": 2020,
+    "genre": "Game Creation"
+  },
+  {
+    "title": "The Order: 1886",
+    "developerName": "Ready at Dawn",
+    "yearReleased": 2015,
+    "genre": "Action-Adventure"
+  },
+  {
+    "title": "The Elder Scrolls V: Skyrim",
+    "developerName": "Bethesda Softworks",
+    "yearReleased": 2011,
+    "genre": "Action, Role-Playing"
+  },
+  {
+    "title": "Control",
+    "developerName": "505 Games",
+    "yearReleased": 2019,
+    "genre": "Action-Adventure"
+  },
+  {
+    "title": "Tomb Raider",
+    "developerName": "Crystal Dynamics",
+    "yearReleased": 2013,
+    "genre": "Action-Adventure"
+  },
+  {
+    "title": "Sackboy: A Big Adventure",
+    "developerName": "Sumo Digital",
+    "yearReleased": 2020,
+    "genre": "Platformer"
+  },
+  {
+    "title": "PUBG: Battlegrounds",
+    "developerName": "Tencent Games",
+    "yearReleased": 2016,
+    "genre": "Battle Royale"
+  },
+  {
+    "title": "Cyberpunk 2077",
+    "developerName": "CD Projekt Red",
+    "yearReleased": 2020,
+    "genre": "Action, Role-Playing"
+  },
+  {
+    "title": "Red Dead Redemption 2",
+    "developerName": "Rockstar Games",
+    "yearReleased": 2018,
+    "genre": "Action-Adventure"
+  },
+  {
+    "title": "Assassin's Creed Valhalla",
+    "developerName": "Ubisoft",
+    "yearReleased": 2020,
+    "genre": "Action, Adventure"
+  },
+  {
+    "title": "Overwatch 2",
+    "developerName": "Blizzard Entertainment",
+    "yearReleased": 2022,
+    "genre": "First-Person Shooter"
+  },
+  {
+    "title": "Star Wars Jedi: Fallen Order",
+    "developerName": "Electronic Arts (EA)",
+    "yearReleased": 2019,
+    "genre": "Action-Adventure"
+  },
+  {
+    "title": "Final Fantasy XIV: A Realm Reborn",
+    "developerName": "Square Enix",
+    "yearReleased": 2013,
+    "genre": "Massively Multiplayer Online RPG"
+  },
+  {
+    "title": "The Last of Us Part II",
+    "developerName": "Naughty Dog",
+    "yearReleased": 2020,
+    "genre": "Action-Adventure"
+  },
+  {
+    "title": "Resident Evil Village",
+    "developerName": "Capcom",
+    "yearReleased": 2021,
+    "genre": "Survival Horror"
+  },
+  {
+    "title": "Fallout 76",
+    "developerName": "Bethesda Game Studios",
+    "yearReleased": 2018,
+    "genre": "Action, Role-Playing"
+  },
+  {
+    "title": "Mass Effect: Andromeda",
+    "developerName": "BioWare",
+    "yearReleased": 2017,
+    "genre": "Action, Role-Playing"
+  },
+  {
+    "title": "Destiny 2: Forsaken",
+    "developerName": "Bungie",
+    "yearReleased": 2018,
+    "genre": "First-Person Shooter"
+  },
+  {
+    "title": "Gears 5",
+    "developerName": "Epic Games",
+    "yearReleased": 2019,
+    "genre": "Third-Person Shooter"
+  },
+  {
+    "title": "Borderlands: The Pre-Sequel",
+    "developerName": "Gearbox Software",
+    "yearReleased": 2014,
+    "genre": "First-Person Shooter"
+  },
+  {
+    "title": "Metal Gear Solid V: Ground Zeroes",
+    "developerName": "Konami",
+    "yearReleased": 2014,
+    "genre": "Action, Stealth"
+  },
+  {
+    "title": "Baldur's Gate III",
+    "developerName": "Larian Studios",
+    "yearReleased": 2020,
+    "genre": "Role-Playing"
+  },
+  {
+    "title": "Star Wars: The Force Unleashed",
+    "developerName": "LucasArts",
+    "yearReleased": 2008,
+    "genre": "Action-Adventure"
+  },
+  {
+    "title": "Minecraft Dungeons",
+    "developerName": "Mojang Studios",
+    "yearReleased": 2020,
+    "genre": "Action, Adventure"
+  },
+  {
+    "title": "The Outer Worlds",
+    "developerName": "Obsidian Entertainment",
+    "yearReleased": 2019,
+    "genre": "Action, Role-Playing"
+  },
+  {
+    "title": "Bayonetta 2",
+    "developerName": "PlatinumGames",
+    "yearReleased": 2014,
+    "genre": "Action"
+  },
+  {
+    "title": "Valorant",
+    "developerName": "Riot Games",
+    "yearReleased": 2020,
+    "genre": "First-Person Shooter"
+  },
+  {
+    "title": "Yakuza: Like a Dragon",
+    "developerName": "Sega",
+    "yearReleased": 2020,
+    "genre": "Action, Role-Playing"
+  },
+  {
+    "title": "Ghost of Tsushima: Director's Cut",
+    "developerName": "Sucker Punch Productions",
+    "yearReleased": 2021,
+    "genre": "Action-Adventure"
+  },
+  {
+    "title": "Call of Duty: Black Ops Cold War",
+    "developerName": "Treyarch",
+    "yearReleased": 2020,
+    "genre": "First-Person Shooter"
+  },
+  {
+    "title": "Forza Horizon 4",
+    "developerName": "Turn 10 Studios",
+    "yearReleased": 2018,
+    "genre": "Racing"
+  },
+  {
+    "title": "Dota 2",
+    "developerName": "Valve Corporation",
+    "yearReleased": 2013,
+    "genre": "Multiplayer Online Battle Arena"
+  },
+  {
+    "title": "Middle-earth: Shadow of War",
+    "developerName": "Warner Bros. Interactive Entertainment",
+    "yearReleased": 2017,
+    "genre": "Action, Adventure"
+  },
+  {
+    "title": "Halo Infinite",
+    "developerName": "343 Industries",
+    "yearReleased": 2021,
+    "genre": "First-Person Shooter"
+  },
+  {
+    "title": "Mafia: Definitive Edition",
+    "developerName": "Hangar 13",
+    "yearReleased": 2020,
+    "genre": "Action-Adventure"
+  },
+  {
+    "title": "Ratchet & Clank: Rift Apart",
+    "developerName": "Insomniac Games",
+    "yearReleased": 2021,
+    "genre": "Platformer"
+  },
+  {
+    "title": "Metal Gear Solid V: The Definitive Experience",
+    "developerName": "Kojima Productions",
+    "yearReleased": 2018,
+    "genre": "Action, Stealth"
+  },
+  {
+    "title": "F.E.A.R. 3",
+    "developerName": "Monolith Productions",
+    "yearReleased": 2011,
+    "genre": "First-Person Shooter"
+  },
+  {
+    "title": "Risen 2: Dark Waters",
+    "developerName": "Piranha Games",
+    "yearReleased": 2012,
+    "genre": "Action, Role-Playing"
+  },
+  {
+    "title": "Titanfall 2",
+    "developerName": "Respawn Entertainment",
+    "yearReleased": 2016,
+    "genre": "First-Person Shooter"
+  },
+  {
+    "title": "God of War Ragnarok",
+    "developerName": "Santa Monica Studio",
+    "yearReleased": 2022,
+    "genre": "Action-Adventure"
+  },
+  {
+    "title": "Left 4 Dead 2",
+    "developerName": "Turtle Rock Studios",
+    "yearReleased": 2009,
+    "genre": "First-Person Shooter"
+  },
+  {
+    "title": "River City Girls",
+    "developerName": "WayForward Technologies",
+    "yearReleased": 2019,
+    "genre": "Beat 'em up"
+  },
+  {
+    "title": "Cyber Shadow",
+    "developerName": "Yacht Club Games",
+    "yearReleased": 2021,
+    "genre": "Platformer"
+  },
+  {
+    "title": "The Elder Scrolls V: Skyrim Special Edition",
+    "developerName": "Zenimax Online Studios",
+    "yearReleased": 2016,
+    "genre": "Action, Role-Playing"
+  },
+  {
+    "title": "Killzone: Shadow Fall",
+    "developerName": "Guerrilla Games",
+    "yearReleased": 2013,
+    "genre": "First-Person Shooter"
+  },
+  {
+    "title": "Forza Horizon 3",
+    "developerName": "Playground Games",
+    "yearReleased": 2016,
+    "genre": "Racing"
+  },
+  {
+    "title": "Total War: Warhammer II",
+    "developerName": "The Creative Assembly",
+    "yearReleased": 2017,
+    "genre": "Strategy"
+  },
+  {
+    "title": "The Pathless",
+    "developerName": "Hello Games",
+    "yearReleased": 2020,
+    "genre": "Action-Adventure"
+  },
+  {
+    "title": "The Sims 3",
+    "developerName": "Maxis",
+    "yearReleased": 2009,
+    "genre": "Life Simulation"
+  },
+  {
+    "title": "Alan Wake",
+    "developerName": "Remedy Entertainment",
+    "yearReleased": 2010,
+    "genre": "Action-Adventure"
+  },
+  {
+    "title": "LittleBigPlanet 3",
+    "developerName": "Media Molecule",
+    "yearReleased": 2014,
+    "genre": "Platformer"
+  },
+  {
+    "title": "Deformers",
+    "developerName": "Ready at Dawn",
+    "yearReleased": 2017,
+    "genre": "Action"
+  },
+  {
+    "title": "Dishonored",
+    "developerName": "Bethesda Softworks",
+    "yearReleased": 2012,
+    "genre": "Action, Stealth"
+  },
+  {
+    "title": "Terraria",
+    "developerName": "505 Games",
+    "yearReleased": 2011,
+    "genre": "Sandbox"
+  }
+]

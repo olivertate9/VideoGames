@@ -113,12 +113,13 @@ public class GameController {
 
     /**
      * Endpoint to retrieve a list of games based on specified filters.
+     * Optional filters: developerId, yearReleased
      *
      * @param dto The GameSearchDTO containing filtering criteria.
      * @return ResponseEntity containing a list of games matching the filters.
      */
     @Operation(
-            summary = "Retrieve games by filters",
+            summary = "Retrieve games by optional filters: developerId, yearReleased",
             description = "Retrieves a list of games based on specified filters."
     )
     @PostMapping("/_list")
@@ -129,12 +130,13 @@ public class GameController {
 
     /**
      * Endpoint to generate a report based on specified filters that can be downloaded to CSV-file.
+     * Optional filters: developerId, yearReleased
      *
      * @param dto      The GameSearchDTO containing filtering criteria for the report.
      * @param response The HttpServletResponse used to write the report as a file.
      */
     @Operation(
-            summary = "Generate report by filters",
+            summary = "Generate report by optional filters: developerId, yearReleased",
             description = "Generates a report based on specified filters that can be downloaded as a CSV file."
     )
     @PostMapping(value = "/_report", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
