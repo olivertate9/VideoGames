@@ -10,18 +10,22 @@ import dev.profitsoft.videogames.entity.GameEntity;
 import dev.profitsoft.videogames.mapper.GameMapper;
 import dev.profitsoft.videogames.repository.GameRepository;
 import dev.profitsoft.videogames.service.DeveloperService;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -32,13 +36,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK,
         classes = VideoGamesApplication.class)
 @AutoConfigureMockMvc
-@Transactional
+@Testcontainers
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class GameControllerIntTest {
 
     private static final String DEVELOPER_NAME = "Ubisoft";
     private static final String TITLE = "Test Title";
     private static final int YEAR_RELEASED = 1999;
     private static final String GENRE = "Action";
+
+    @Container
+    @ServiceConnection
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:alpine");
 
     @Autowired
     private MockMvc mvc;
@@ -59,6 +68,7 @@ class GameControllerIntTest {
 
     @BeforeEach
     void setUp() {
+        gameRepository.deleteAll();
         GameEntity gameEntity = new GameEntity();
         DeveloperEntity developerEntity = developerService.findDeveloperByNameOrThrow(DEVELOPER_NAME);
         gameEntity.setDeveloper(developerEntity);

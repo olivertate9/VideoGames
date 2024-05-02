@@ -153,14 +153,14 @@ public class GameController {
             description = "Uploads games from a JSON file."
     )
     @ApiResponse(responseCode = "201", description = "Games from JSON-file added successfully")
-    @PostMapping("/upload")
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<GameUploadDTO> uploadGamesFromJsonFile(
             @Parameter(
                     description = "JSON file containing game data",
                     required = true,
                     content = @Content(mediaType = "multipart/form-data")
             )
-            @RequestParam("file") MultipartFile multipart) {
+            @RequestPart("file") MultipartFile multipart) {
         GameUploadDTO dto = gameService.uploadGamesFromJsonFile(multipart);
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
