@@ -86,7 +86,7 @@ class DeveloperControllerIntTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpectAll(
-                        status().isOk(),
+                        status().isCreated(),
                         jsonPath("$.name").value(newDeveloperName),
                         jsonPath("$.yearFounded").value(YEAR_FOUNDED)
                 );

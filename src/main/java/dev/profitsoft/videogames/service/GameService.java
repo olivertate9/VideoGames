@@ -4,9 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.profitsoft.videogames.dto.game.*;
 import dev.profitsoft.videogames.entity.DeveloperEntity;
 import dev.profitsoft.videogames.entity.GameEntity;
-import dev.profitsoft.videogames.exception.DeveloperNotFoundException;
-import dev.profitsoft.videogames.exception.FileParsingException;
-import dev.profitsoft.videogames.exception.GameNotFoundException;
+import dev.profitsoft.videogames.exception.exceptions.DeveloperNotFoundException;
+import dev.profitsoft.videogames.exception.exceptions.FileParsingException;
+import dev.profitsoft.videogames.exception.exceptions.GameNotFoundException;
+import dev.profitsoft.videogames.exception.exceptions.ReportGeneratingException;
 import dev.profitsoft.videogames.mapper.GameMapper;
 import dev.profitsoft.videogames.repository.GameRepository;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,10 +26,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service class for managing game-related operations.
+ */
 @Service
 @AllArgsConstructor
 public class GameService {
 
+    /**
+     * Represents the header value for a CSV file attachment response.
+     * It specifies the filename of the attachment as "games.csv".
+     */
     private static final String HEADER = "attachment; filename=games.csv";
 
     private final GameRepository gameRepository;
@@ -37,23 +45,51 @@ public class GameService {
     private final ObjectMapper objectMapper;
     private final Validator validator;
 
+    /**
+     * Saves a new game in the database.
+     *
+     * @param dto The game data to be saved.
+     * @return The saved game representation.
+     * @throws DeveloperNotFoundException If the developer provided does not exist.
+     */
     public GameUpdateDTO saveGame(GameUpdateDTO dto) {
         GameEntity gameEntity = createGameEntityFromDTO(dto);
         GameEntity savedGame = gameRepository.save(gameEntity);
         return gameMapper.toGameUpdateDTO(savedGame);
     }
 
+    /**
+     * Retrieves a game by ID.
+     *
+     * @param id the ID of the game to retrieve.
+     * @return The retrieved game representation.
+     * @throws GameNotFoundException If the game with provided ID is not found.
+     */
     public GameDTO getGame(Long id) {
         GameEntity gameEntity = getGameByIdOrThrow(id);
         return gameMapper.toGameDTO(gameEntity);
     }
 
+    /**
+     * Updates an existing game in the database.
+     *
+     * @param id  The ID of the game to update.
+     * @param dto The updated data for game.
+     * @throws GameNotFoundException      If the game with provided ID is not found.
+     * @throws DeveloperNotFoundException If the developer provided does not exist.
+     */
     public void updateGame(Long id, GameUpdateDTO dto) {
         GameEntity gameEntity = getGameByIdOrThrow(id);
         updateValues(dto, gameEntity);
         gameRepository.save(gameEntity);
     }
 
+    /**
+     * Deletes a game from the database.
+     *
+     * @param id The ID of the game to delete.
+     * @throws GameNotFoundException If the game with provided ID is not found.
+     */
     public void deleteGame(Long id) {
         if (!gameRepository.existsById(id)) {
             throw new GameNotFoundException("Game with id %d not found".formatted(id));
@@ -61,16 +97,27 @@ public class GameService {
         gameRepository.deleteById(id);
     }
 
+    /**
+     * Retrieves a list of games based on search filters.
+     *
+     * @param dto The search filters.
+     * @return The list of games matching the filters and total pages of searched results.
+     */
     public GameListDTO retrieveGamesByFilters(GameSearchDTO dto) {
         PageRequest pageRequest = PageRequest.of(dto.getPage() - 1, dto.getSize());
-
         Page<GameEntity> gamesPage = gameRepository.findGamesWithFilters(dto.getDeveloperId(), dto.getYearReleased(), pageRequest);
-
         List<GameInfoDTO> gameInfoDTOList = gamesPage.map(gameMapper::toGameInfoDTO).toList();
 
         return new GameListDTO(gameInfoDTOList, gamesPage.getTotalPages());
     }
 
+    /**
+     * Generates a report of games based on search filters and writes it to the HTTP response.
+     *
+     * @param dto      The search filters.
+     * @param response The HTTP response object.
+     * @throws ReportGeneratingException If there was an error generating report.
+     */
     public void generateReport(GameSearchDTO dto, HttpServletResponse response) {
         try {
             setResponseHeaders(response);
@@ -78,10 +125,17 @@ public class GameService {
             String reportData = generateReportData(gameList);
             writeReportToResponse(response, reportData);
         } catch (IOException e) {
-            throw new FileParsingException(e.getMessage());
+            throw new ReportGeneratingException(e.getMessage());
         }
     }
 
+    /**
+     * Uploads games from a JSON file to the database.
+     *
+     * @param file The JSON file containing game data.
+     * @return The upload summary.
+     * @throws FileParsingException if there was an error processing file.
+     */
     public GameUploadDTO uploadGamesFromJsonFile(MultipartFile file) {
         List<GameEntity> gamesToSave = new ArrayList<>();
         int invalidDto = 0;
@@ -128,8 +182,8 @@ public class GameService {
     }
 
     private GameEntity createGameEntityFromDTO(GameUpdateDTO dto) {
-        GameEntity gameEntity = gameMapper.toGameEntity(dto);
         DeveloperEntity developerEntity = developerService.findDeveloperByNameOrThrow(dto.getDeveloperName());
+        GameEntity gameEntity = gameMapper.toGameEntity(dto);
         gameEntity.setDeveloper(developerEntity);
         return gameEntity;
     }
