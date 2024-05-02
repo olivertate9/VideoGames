@@ -3,6 +3,11 @@ package dev.profitsoft.videogames.controller;
 import dev.profitsoft.videogames.dto.game.*;
 import dev.profitsoft.videogames.dto.response.RestResponse;
 import dev.profitsoft.videogames.service.GameService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * REST controller for managing games.
  */
+@Tag(name = "Game", description = "Game management APIs")
 @RestController
 @RequestMapping("/api/game")
 @RequiredArgsConstructor
@@ -28,6 +34,11 @@ public class GameController {
      * @param dto The GameUpdateDTO representing the game to be added.
      * @return ResponseEntity containing the saved GameUpdateDTO with HTTP status 201 (Created).
      */
+    @Operation(
+            summary = "Add a new game",
+            description = "Adds a new game to the system."
+    )
+    @ApiResponse(responseCode = "201", description = "Game added successfully")
     @PostMapping
     public ResponseEntity<GameUpdateDTO> addGame(@Valid @RequestBody GameUpdateDTO dto) {
         GameUpdateDTO savedGame = gameService.saveGame(dto);
@@ -41,8 +52,17 @@ public class GameController {
      * @param id The ID of the game to retrieve.
      * @return ResponseEntity containing the retrieved GameDTO with HTTP status 200 (OK).
      */
+    @Operation(
+            summary = "Retrieve a game by ID",
+            description = "Retrieves a game based on its unique ID."
+    )
     @GetMapping("/{id}")
-    public ResponseEntity<GameDTO> getGame(@PathVariable Long id) {
+    public ResponseEntity<GameDTO> getGame(
+            @Parameter(
+                    description = "ID of the game to retrieve",
+                    required = true
+            )
+            @PathVariable Long id) {
         GameDTO game = gameService.getGame(id);
         return ResponseEntity.ok(game);
     }
@@ -54,8 +74,18 @@ public class GameController {
      * @param dto The GameUpdateDTO containing updated game information.
      * @return ResponseEntity with a success message and HTTP status 200 (OK).
      */
+    @Operation(
+            summary = "Update a game",
+            description = "Updates an existing game based on its ID."
+    )
     @PutMapping("/{id}")
-    public ResponseEntity<RestResponse> updateGame(@PathVariable Long id, @Valid @RequestBody GameUpdateDTO dto) {
+    public ResponseEntity<RestResponse> updateGame(
+            @Parameter(
+                    description = "ID of the game to update",
+                    required = true
+            )
+            @PathVariable Long id,
+            @Valid @RequestBody GameUpdateDTO dto) {
         gameService.updateGame(id, dto);
         return ResponseEntity.ok().body(new RestResponse("Game updated successfully"));
     }
@@ -66,8 +96,17 @@ public class GameController {
      * @param id The ID of the game to delete.
      * @return ResponseEntity with a success message and HTTP status 200 (OK).
      */
+    @Operation(
+            summary = "Delete a game",
+            description = "Deletes a game based on its ID."
+    )
     @DeleteMapping("/{id}")
-    public ResponseEntity<RestResponse> deleteGame(@PathVariable Long id) {
+    public ResponseEntity<RestResponse> deleteGame(
+            @Parameter(
+                    description = "ID of the game to delete",
+                    required = true
+            )
+            @PathVariable Long id) {
         gameService.deleteGame(id);
         return ResponseEntity.ok().body(new RestResponse("Game deleted"));
     }
@@ -78,6 +117,10 @@ public class GameController {
      * @param dto The GameSearchDTO containing filtering criteria.
      * @return ResponseEntity containing a list of games matching the filters.
      */
+    @Operation(
+            summary = "Retrieve games by filters",
+            description = "Retrieves a list of games based on specified filters."
+    )
     @PostMapping("/_list")
     public ResponseEntity<GameListDTO> retrieveGamesByFilters(@RequestBody GameSearchDTO dto) {
         GameListDTO resultDTO = gameService.retrieveGamesByFilters(dto);
@@ -90,6 +133,10 @@ public class GameController {
      * @param dto      The GameSearchDTO containing filtering criteria for the report.
      * @param response The HttpServletResponse used to write the report as a file.
      */
+    @Operation(
+            summary = "Generate report by filters",
+            description = "Generates a report based on specified filters that can be downloaded as a CSV file."
+    )
     @PostMapping(value = "/_report", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public void generateReportByFilters(@RequestBody GameSearchDTO dto, HttpServletResponse response) {
         gameService.generateReport(dto, response);
@@ -101,8 +148,19 @@ public class GameController {
      * @param multipart The MultipartFile containing the JSON file to upload.
      * @return ResponseEntity containing information about the uploaded games.
      */
+    @Operation(
+            summary = "Upload games from JSON file",
+            description = "Uploads games from a JSON file."
+    )
+    @ApiResponse(responseCode = "201", description = "Games from JSON-file added successfully")
     @PostMapping("/upload")
-    public ResponseEntity<GameUploadDTO> uploadGamesFromJsonFile(@RequestParam("file") MultipartFile multipart) {
+    public ResponseEntity<GameUploadDTO> uploadGamesFromJsonFile(
+            @Parameter(
+                    description = "JSON file containing game data",
+                    required = true,
+                    content = @Content(mediaType = "multipart/form-data")
+            )
+            @RequestParam("file") MultipartFile multipart) {
         GameUploadDTO dto = gameService.uploadGamesFromJsonFile(multipart);
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }

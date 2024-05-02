@@ -3,6 +3,7 @@ package dev.profitsoft.videogames.mapper;
 import dev.profitsoft.videogames.dto.developer.DeveloperDTO;
 import dev.profitsoft.videogames.entity.DeveloperEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * Mapper interface for converting between DeveloperEntity and DeveloperDTO.
@@ -24,5 +25,6 @@ public interface DeveloperMapper {
      * @param dto The DeveloperDTO to convert.
      * @return The DeveloperEntity.
      */
+    @Mapping(target = "id", ignore = true)
     DeveloperEntity toDeveloperEntity(DeveloperDTO dto);
 }
