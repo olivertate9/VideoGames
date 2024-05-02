@@ -14,20 +14,24 @@ The Game Management System is a RESTful API application built with Spring Boot f
 
    ```bash
    git clone https://github.com/olivertate9/VideoGames.git
-   
-2. **Build the Application**
+
+2. **Run docker-compose from docker-compose.yml in IDE or in CLI**
+   ```bash
+   docker-compose up
+
+3. **Build the Application**
 
    ```bash
    mvn clean package
 
-3. **Run main method**
+4. **Run main method**
    
     from `dev/profitsoft/videogames/VideoGamesApplication.java`
 
-4. **Access the API Documentation**
+5. **Access the API Documentation**
    
    Once the application is running, you can access the Swagger UI to explore and interact with the APIs: [http://localhost:8080/videogames-api-ui.html](http://localhost:8080/videogames-api-ui.html)
    
-5. **JSON-file with game data**
+6. **JSON-file with game data**
 
    located at `src/main/resources/gamedata.json`
