@@ -17,9 +17,7 @@ public interface GameMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "developer", ignore = true)
-    GameEntity toEntity(GameUpdateDTO dto);
-
-    GameEntity toEntity(GameDTO dto);
+    GameEntity toGameEntity(GameUpdateDTO dto);
 
     GameInfoDTO toGameInfoDTO(GameEntity gameEntity);
 }

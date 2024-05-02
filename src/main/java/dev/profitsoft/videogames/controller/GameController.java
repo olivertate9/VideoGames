@@ -20,8 +20,8 @@ public class GameController {
     private final GameService gameService;
 
     @PostMapping
-    public ResponseEntity<GameUpdateDTO> addGame(@Valid @RequestBody GameUpdateDTO gameUpdateDto) {
-        GameUpdateDTO savedGame = gameService.saveGame(gameUpdateDto);
+    public ResponseEntity<GameUpdateDTO> addGame(@Valid @RequestBody GameUpdateDTO dto) {
+        GameUpdateDTO savedGame = gameService.saveGame(dto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(savedGame);
     }
@@ -33,8 +33,8 @@ public class GameController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RestResponse> updateGame(@PathVariable Long id, @Valid @RequestBody GameUpdateDTO gameUpdateDto) {
-        gameService.updateGame(id, gameUpdateDto);
+    public ResponseEntity<RestResponse> updateGame(@PathVariable Long id, @Valid @RequestBody GameUpdateDTO dto) {
+        gameService.updateGame(id, dto);
         return ResponseEntity.ok().body(new RestResponse("Game updated successfully"));
     }
 
@@ -45,20 +45,19 @@ public class GameController {
     }
 
     @PostMapping("/_list")
-    public ResponseEntity<GameListDTO> findGamesWithFilters(@RequestBody GameSearchDTO gameSearchDTO) {
-        GameListDTO resultDTO = gameService.searchGamesWithFilters(gameSearchDTO);
+    public ResponseEntity<GameListDTO> retrieveGamesByFilters(@RequestBody GameSearchDTO dto) {
+        GameListDTO resultDTO = gameService.retrieveGamesByFilters(dto);
         return ResponseEntity.ok(resultDTO);
     }
 
     @PostMapping(value = "/_report", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    public void generateReport(@RequestBody GameSearchDTO gameSearchDTO, HttpServletResponse response) {
-        gameService.generateReport(gameSearchDTO, response);
+    public void generateReportByFilters(@RequestBody GameSearchDTO dto, HttpServletResponse response) {
+        gameService.generateReport(dto, response);
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<GameUploadDTO> uploadFromFile(@RequestParam("file") MultipartFile multipart) {
-        GameUploadDTO gameUploadDTO = gameService.uploadFromFile(multipart);
-        return ResponseEntity.status(HttpStatus.CREATED).body(gameUploadDTO);
+    public ResponseEntity<GameUploadDTO> uploadGamesFromJsonFile(@RequestParam("file") MultipartFile multipart) {
+        GameUploadDTO dto = gameService.uploadGamesFromJsonFile(multipart);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 }

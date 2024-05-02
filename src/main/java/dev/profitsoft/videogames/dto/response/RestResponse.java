@@ -1,16 +1,15 @@
 package dev.profitsoft.videogames.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.jackson.Jacksonized;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Value;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@Builder
-@Jacksonized
+@Value
 public class RestResponse {
-    private String response;
+    String response;
+
+    @JsonCreator
+    public RestResponse(@JsonProperty("response") String response) {
+        this.response = response;
+    }
 }

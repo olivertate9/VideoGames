@@ -1,14 +1,10 @@
 package dev.profitsoft.videogames.dto.response;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Value;
 
-@Getter
-@Setter
-@Builder
+@Value
 public class ErrorResponse {
-    private int status;
-    private String description;
-    private String message;
+    int status;
+    String description;
+    String message;
 }

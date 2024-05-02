@@ -1,20 +1,19 @@
 package dev.profitsoft.videogames.dto.game;
 
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Value;
 
-@Getter
-@Setter
-@Builder
+@Value
 public class GameSearchDTO {
-    private Long developerId;
-    private Integer yearReleased;
+    Long developerId;
 
-    @Min(value = 1, message = "Page number must be at least 1")
-    private int page;
+    @Max(value = 2024, message = "Year Released should be less or equal to {value}")
+    Integer yearReleased;
 
-    @Min(value = 1, message = "Page size must be at least 1")
-    private int size;
+    @Min(value = 1, message = "Page number must be at least {value}")
+    int page;
+
+    @Min(value = 1, message = "Page size must be at least {value}")
+    int size;
 }

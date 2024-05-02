@@ -4,8 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.profitsoft.videogames.dto.game.*;
 import dev.profitsoft.videogames.entity.DeveloperEntity;
 import dev.profitsoft.videogames.entity.GameEntity;
+import dev.profitsoft.videogames.exception.DeveloperNotFoundException;
 import dev.profitsoft.videogames.exception.FileParsingException;
-import dev.profitsoft.videogames.exception.NotFoundException;
+import dev.profitsoft.videogames.exception.GameNotFoundException;
 import dev.profitsoft.videogames.mapper.GameMapper;
 import dev.profitsoft.videogames.repository.GameRepository;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,12 +29,13 @@ import java.util.List;
 @AllArgsConstructor
 public class GameService {
 
+    private static final String HEADER = "attachment; filename=games.csv";
+
     private final GameRepository gameRepository;
     private final DeveloperService developerService;
     private final GameMapper gameMapper;
     private final ObjectMapper objectMapper;
     private final Validator validator;
-
 
     public GameUpdateDTO saveGame(GameUpdateDTO dto) {
         GameEntity gameEntity = createGameEntityFromDTO(dto);
@@ -41,56 +44,45 @@ public class GameService {
     }
 
     public GameDTO getGame(Long id) {
-        GameEntity gameEntity = getByIdOrThrow(id);
+        GameEntity gameEntity = getGameByIdOrThrow(id);
         return gameMapper.toGameDTO(gameEntity);
     }
 
     public void updateGame(Long id, GameUpdateDTO dto) {
-        GameEntity gameEntity = getByIdOrThrow(id);
+        GameEntity gameEntity = getGameByIdOrThrow(id);
         updateValues(dto, gameEntity);
         gameRepository.save(gameEntity);
     }
 
     public void deleteGame(Long id) {
         if (!gameRepository.existsById(id)) {
-            throw new NotFoundException("Game with id %d not found".formatted(id));
+            throw new GameNotFoundException("Game with id %d not found".formatted(id));
         }
-
         gameRepository.deleteById(id);
     }
 
-    public GameListDTO searchGamesWithFilters(GameSearchDTO dto) {
+    public GameListDTO retrieveGamesByFilters(GameSearchDTO dto) {
         PageRequest pageRequest = PageRequest.of(dto.getPage() - 1, dto.getSize());
 
         Page<GameEntity> gamesPage = gameRepository.findGamesWithFilters(dto.getDeveloperId(), dto.getYearReleased(), pageRequest);
 
         List<GameInfoDTO> gameInfoDTOList = gamesPage.map(gameMapper::toGameInfoDTO).toList();
 
-        return GameListDTO.builder().games(gameInfoDTOList).totalPages(gamesPage.getTotalPages()).build();
+        return new GameListDTO(gameInfoDTOList, gamesPage.getTotalPages());
     }
 
     public void generateReport(GameSearchDTO dto, HttpServletResponse response) {
-        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=games.csv");
-
         try {
-            StringBuilder sb = new StringBuilder();
-            List<GameEntity> list = gameRepository.findAllForReport(dto.getDeveloperId(), dto.getYearReleased());
-            sb.append("Title;Genre\n");
-            for (GameEntity gameEntity : list) {
-                sb.append(gameEntity.getTitle());
-                sb.append(";");
-                sb.append(gameEntity.getGenre());
-                sb.append("\n");
-            }
-            response.getOutputStream().write(sb.toString().getBytes());
-            response.getOutputStream().flush();
+            setResponseHeaders(response);
+            List<GameEntity> gameList = gameRepository.findAllForReport(dto.getDeveloperId(), dto.getYearReleased());
+            String reportData = generateReportData(gameList);
+            writeReportToResponse(response, reportData);
         } catch (IOException e) {
             throw new FileParsingException(e.getMessage());
         }
     }
 
-    public GameUploadDTO uploadFromFile(MultipartFile file) {
+    public GameUploadDTO uploadGamesFromJsonFile(MultipartFile file) {
         List<GameEntity> gamesToSave = new ArrayList<>();
         int invalidDto = 0;
 
@@ -104,7 +96,7 @@ public class GameService {
             try {
                 GameEntity gameEntity = createGameEntityFromDTO(dto);
                 gamesToSave.add(gameEntity);
-            } catch (NotFoundException e) {
+            } catch (DeveloperNotFoundException e) {
                 invalidDto++;
             }
         }
@@ -113,8 +105,30 @@ public class GameService {
         return new GameUploadDTO(gamesToSave.size(), invalidDto);
     }
 
+    private void setResponseHeaders(HttpServletResponse response) {
+        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, HEADER);
+    }
+
+    private String generateReportData(List<GameEntity> gameList) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Title;Genre\n");
+        for (GameEntity gameEntity : gameList) {
+            sb.append(gameEntity.getTitle());
+            sb.append(";");
+            sb.append(gameEntity.getGenre());
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
+    private void writeReportToResponse(HttpServletResponse response, String reportData) throws IOException {
+        response.getOutputStream().write(reportData.getBytes(StandardCharsets.UTF_8));
+        response.getOutputStream().flush();
+    }
+
     private GameEntity createGameEntityFromDTO(GameUpdateDTO dto) {
-        GameEntity gameEntity = gameMapper.toEntity(dto);
+        GameEntity gameEntity = gameMapper.toGameEntity(dto);
         DeveloperEntity developerEntity = developerService.findDeveloperByNameOrThrow(dto.getDeveloperName());
         gameEntity.setDeveloper(developerEntity);
         return gameEntity;
@@ -141,8 +155,7 @@ public class GameService {
         gameEntity.setYearReleased(dto.getYearReleased());
     }
 
-    private GameEntity getByIdOrThrow(Long id) {
-        return gameRepository.findById(id).orElseThrow(() -> new NotFoundException("Game with id %d not found".formatted(id)));
+    private GameEntity getGameByIdOrThrow(Long id) {
+        return gameRepository.findById(id).orElseThrow(() -> new GameNotFoundException("Game with id %d not found".formatted(id)));
     }
-
 }

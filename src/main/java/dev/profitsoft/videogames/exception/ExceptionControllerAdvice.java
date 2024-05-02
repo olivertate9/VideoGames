@@ -1,9 +1,6 @@
-package dev.profitsoft.videogames.controller;
+package dev.profitsoft.videogames.exception;
 
 import dev.profitsoft.videogames.dto.response.ErrorResponse;
-import dev.profitsoft.videogames.exception.FileParsingException;
-import dev.profitsoft.videogames.exception.NotFoundException;
-import dev.profitsoft.videogames.exception.UniqueValueException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -15,8 +12,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ExceptionControllerAdvice {
 
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorResponse> exceptionNotFoundHandler(NotFoundException e) {
+    @ExceptionHandler(GameNotFoundException.class)
+    public ResponseEntity<ErrorResponse> exceptionGameNotFoundHandler(GameNotFoundException e) {
+        return buildErrorResponse(HttpStatus.NOT_FOUND, e.getMessage());
+    }
+
+    @ExceptionHandler(DeveloperNotFoundException.class)
+    public ResponseEntity<ErrorResponse> exceptionDevNotFoundHandler(DeveloperNotFoundException e) {
         return buildErrorResponse(HttpStatus.NOT_FOUND, e.getMessage());
     }
 
@@ -25,8 +27,8 @@ public class ExceptionControllerAdvice {
         return buildErrorResponse(HttpStatus.BAD_REQUEST, getInvalidFields(e));
     }
 
-    @ExceptionHandler(UniqueValueException.class)
-    public ResponseEntity<ErrorResponse> exceptionValidationHandler(UniqueValueException e) {
+    @ExceptionHandler(UniqueValueViolationException.class)
+    public ResponseEntity<ErrorResponse> exceptionValidationHandler(UniqueValueViolationException e) {
         return buildErrorResponse(HttpStatus.CONFLICT, e.getMessage());
     }
 
@@ -36,12 +38,8 @@ public class ExceptionControllerAdvice {
     }
 
     private ResponseEntity<ErrorResponse> buildErrorResponse(HttpStatus status, String message) {
-
-        return ResponseEntity.status(status).body(ErrorResponse.builder()
-                .status(status.value())
-                .message(message)
-                .description(status.getReasonPhrase())
-                .build());
+        ErrorResponse errorResponse = new ErrorResponse(status.value(), message, status.getReasonPhrase());
+        return ResponseEntity.status(status).body(errorResponse);
     }
 
     private String getInvalidFields(MethodArgumentNotValidException e) {

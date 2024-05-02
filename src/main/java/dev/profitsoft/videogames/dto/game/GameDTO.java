@@ -1,17 +1,13 @@
 package dev.profitsoft.videogames.dto.game;
 
 import dev.profitsoft.videogames.entity.DeveloperEntity;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Value;
 
-@Getter
-@Setter
-@Builder
+@Value
 public class GameDTO {
-    private Long id;
-    private String title;
-    private DeveloperEntity developer;
-    private int yearReleased;
-    private String genre;
+    Long id;
+    String title;
+    DeveloperEntity developer;
+    int yearReleased;
+    String genre;
 }

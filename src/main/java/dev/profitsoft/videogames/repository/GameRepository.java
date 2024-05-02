@@ -25,13 +25,11 @@ public interface GameRepository extends JpaRepository<GameEntity, Long> {
             """)
     Page<GameEntity> findGamesWithFilters(Long developerId, Integer yearReleased, Pageable pageable);
 
-    @Query(value = """
+    @Query("""
             SELECT g
             FROM GameEntity g
             WHERE (?1 IS NULL OR g.developer.id = ?1)
             AND (?2 IS NULL OR g.yearReleased = ?2)
             """)
     List<GameEntity> findAllForReport(Long developerId, Integer yearReleased);
-
-    GameEntity findByTitle(String title);
 }

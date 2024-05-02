@@ -1,27 +1,20 @@
 package dev.profitsoft.videogames.dto.game;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.jackson.Jacksonized;
+import lombok.Value;
 
-@Getter
-@Setter
-@Builder
-@Jacksonized
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Value
 public class GameUpdateDTO {
 
     @NotBlank(message = "title is required")
-    private String title;
+    String title;
 
     @NotBlank(message = "developerName is required")
-    private String developerName;
+    String developerName;
 
-    @Max(value = 2024)
-    private int yearReleased;
-    private String genre;
+    @Max(value = 2024, message = "Year released should be less than or equal to {value}")
+    int yearReleased;
+
+    String genre;
 }

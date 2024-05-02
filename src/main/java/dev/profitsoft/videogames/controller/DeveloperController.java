@@ -36,6 +36,6 @@ public class DeveloperController {
     @DeleteMapping("/{id}")
     public ResponseEntity<RestResponse> deleteDeveloper(@PathVariable Long id) {
         developerService.deleteDeveloperById(id);
-        return ResponseEntity.ok(new RestResponse("Developer deleted successfully"));
+        return ResponseEntity.ok(new RestResponse("Developer deleted"));
     }
 }

@@ -9,6 +9,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "developer")
 public class DeveloperEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -17,7 +18,12 @@ public class DeveloperEntity {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @Column(name = "location")
     private String location;
+
+    @Column(name = "year_founded")
     private int yearFounded;
+
+    @Column(name = "number_of_employees")
     private int numberOfEmployees;
 }

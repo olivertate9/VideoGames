@@ -1,13 +1,15 @@
 package dev.profitsoft.videogames.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "game")
 public class GameEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -16,11 +18,13 @@ public class GameEntity {
     @Column(nullable = false)
     private String title;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "developer_id", nullable = false)
     private DeveloperEntity developer;
 
+    @Column(name = "year_released")
     private int yearReleased;
-    private String genre;
 
+    @Column(name = "genre")
+    private String genre;
 }

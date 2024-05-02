@@ -1,13 +1,9 @@
 package dev.profitsoft.videogames.dto.game;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Value;
 
-@Getter
-@Setter
-@Builder
+@Value
 public class GameInfoDTO {
-    private String title;
-    private String genre;
+    String title;
+    String genre;
 }

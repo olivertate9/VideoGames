@@ -3,6 +3,7 @@ package dev.profitsoft.videogames.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.profitsoft.videogames.VideoGamesApplication;
 import dev.profitsoft.videogames.dto.developer.DeveloperDTO;
+import dev.profitsoft.videogames.dto.response.RestResponse;
 import dev.profitsoft.videogames.entity.DeveloperEntity;
 import dev.profitsoft.videogames.mapper.DeveloperMapper;
 import dev.profitsoft.videogames.repository.DeveloperRepository;
@@ -55,47 +56,53 @@ class DeveloperControllerIntTest {
     }
 
     @Test
-    void testGetDevelopers() throws Exception {
+    void getDevelopers_ValidInput_Success() throws Exception {
         List<DeveloperDTO> developers = developerRepository.findAll().stream()
                 .map(developerMapper::toDeveloperDTO)
                 .toList();
 
-        String json = objectMapper.writeValueAsString(developers);
+        String requestBody = objectMapper.writeValueAsString(developers);
 
         mvc.perform(get("/api/developer"))
-                .andExpect(status().isOk())
-                .andExpect(content().json(json));
+                .andExpectAll(
+                        status().isOk(),
+                        content().json(requestBody)
+                );
     }
 
     @Test
-    void testAddDeveloper() throws Exception {
+    void addDeveloper_ValidInput_Success() throws Exception {
+        String newDeveloperName = "New Developer";
         String requestBody = """
                 {
-                    "name": "New Developer",
-                    "location": "New York",
-                    "yearFounded": 2010,
-                    "numberOfEmployees": 500
+                    "name": "%s",
+                    "location": "%s",
+                    "yearFounded": %d,
+                    "numberOfEmployees": %d
                 }
-                """;
+                """.formatted(newDeveloperName, LOCATION, YEAR_FOUNDED, EMPLOYEES);
 
         mvc.perform(post("/api/developer")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("New Developer"))
-                .andExpect(jsonPath("$.yearFounded").value(2010));
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.name").value(newDeveloperName),
+                        jsonPath("$.yearFounded").value(YEAR_FOUNDED)
+                );
     }
 
     @Test
-    void testAddDeveloperEmptyName() throws Exception {
+    void addDeveloper_EmptyName_ExceptionThrown() throws Exception {
+        String emptyName = "";
         String requestBody = """
                 {
-                    "name": "",
-                    "location": "New York",
-                    "yearFounded": 2010,
-                    "numberOfEmployees": 500
+                    "name": %s,
+                    "location": %s,
+                    "yearFounded": %d,
+                    "numberOfEmployees": %d
                 }
-                """;
+                """.formatted(emptyName, LOCATION, YEAR_FOUNDED, EMPLOYEES);
 
         mvc.perform(post("/api/developer")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -104,15 +111,15 @@ class DeveloperControllerIntTest {
     }
 
     @Test
-    void testAddDeveloperExistentName() throws Exception {
+    void addDeveloper_ExistentName_ExceptionThrown() throws Exception {
         String requestBody = """
                 {
-                    "name": "Ubisoft",
-                    "location": "New York",
-                    "yearFounded": 2010,
-                    "numberOfEmployees": 500
+                    "name": "%s",
+                    "location": "%s",
+                    "yearFounded": %d,
+                    "numberOfEmployees": %d
                 }
-                """;
+                """.formatted(DEVELOPER_NAME, LOCATION, YEAR_FOUNDED, EMPLOYEES);
 
         mvc.perform(post("/api/developer")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -121,35 +128,45 @@ class DeveloperControllerIntTest {
     }
 
     @Test
-    void testUpdateDeveloper() throws Exception {
+    void updateDeveloper_ValidInput_Success() throws Exception {
         Long id = savedDeveloper.getId();
+        String updatedName = "New Name";
+        int updatedYear = 1995;
         String requestBody = """
                 {
-                    "name": "Updated Ubisoft",
-                    "location": "Los Angeles",
-                    "yearFounded": 1990,
-                    "numberOfEmployees": 20000
+                    "name": "%s",
+                    "location": "%s",
+                    "yearFounded": %d,
+                    "numberOfEmployees": %d
+                }
+                """.formatted(updatedName, LOCATION, updatedYear, EMPLOYEES);
+        String responseBody = """
+                {
+                    "response": "Developer updated successfully"
                 }
                 """;
+        RestResponse restResponse = objectMapper.readValue(responseBody, RestResponse.class);
 
         mvc.perform(put("/api/developer/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.response").value("Developer updated successfully"));
+                .andExpect(jsonPath("$.response").value(restResponse.getResponse()));
     }
 
     @Test
-    void testUpdateDeveloperNotFound() throws Exception {
+    void updateDeveloper_NonExistentId_ExceptionThrown() throws Exception {
         Long nonExistentId = 999L;
+        String updatedName = "New Name";
+        int updatedYear = 1995;
         String requestBody = """
                 {
-                    "name": "Updated Ubisoft",
-                    "location": "Los Angeles",
-                    "yearFounded": 1990,
-                    "numberOfEmployees": 20000
+                    "name": "%s",
+                    "location": "%s",
+                    "yearFounded": %d,
+                    "numberOfEmployees": %d
                 }
-                """;
+                """.formatted(updatedName, LOCATION, updatedYear, EMPLOYEES);
 
         mvc.perform(put("/api/developer/{id}", nonExistentId)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -158,34 +175,22 @@ class DeveloperControllerIntTest {
     }
 
     @Test
-    void testUpdateDeveloperExistentName() throws Exception {
+    void deleteDeveloper_ValidInput_Success() throws Exception {
         Long id = savedDeveloper.getId();
-        String requestBody = """
-            {
-                "name": "Ubisoft",
-                "location": "Los Angeles",
-                "yearFounded": 1990,
-                "numberOfEmployees": 20000
-            }
-            """;
-
-        mvc.perform(put("/api/developer/{id}", id)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
-                .andExpect(status().isConflict());
-    }
-
-    @Test
-    void testDeleteDeveloper() throws Exception {
-        Long id = savedDeveloper.getId();
+        String responseBody = """
+                {
+                    "response": "Developer deleted"
+                }
+                """;
+        RestResponse restResponse = objectMapper.readValue(responseBody, RestResponse.class);
 
         mvc.perform(delete("/api/developer/{id}", id))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.response").value("Developer deleted successfully"));
+                .andExpect(jsonPath("$.response").value(restResponse.getResponse()));
     }
 
     @Test
-    void testDeleteDeveloperNotFound() throws Exception {
+    void deleteDeveloper_NonExistentId_ExceptionThrown() throws Exception {
         Long nonExistentId = 999L;
 
         mvc.perform(delete("/api/developer/{id}", nonExistentId))

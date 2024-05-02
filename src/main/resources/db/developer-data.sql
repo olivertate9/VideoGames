@@ -1,7 +1,7 @@
 INSERT INTO developer (name, location, year_founded, number_of_employees)
 VALUES ('Nintendo', 'Kyoto, Japan', 1889, 6202),
        ('Rockstar Games', 'New York City, USA', 1998, 2000),
-       ('Ubisoft', 'Montreuil, France', 1986, 18000),
+       ('Ubisoft', 'Montreal, France', 1986, 18000),
        ('Blizzard Entertainment', 'Irvine, California, USA', 1991, 4700),
        ('Electronic Arts (EA)', 'Redwood City, California, USA', 1982, 11000),
        ('Square Enix', 'Tokyo, Japan', 1986, 5073),

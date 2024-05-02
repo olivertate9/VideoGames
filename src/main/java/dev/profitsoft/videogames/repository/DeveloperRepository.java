@@ -8,7 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface DeveloperRepository extends JpaRepository<DeveloperEntity, Long> {
-    Optional<DeveloperEntity> findByName(String developerName);
 
-    boolean existsByName(String name);
+    Optional<DeveloperEntity> findByName(String developerName);
 }
