@@ -1,6 +1,7 @@
 package dev.profitsoft.videogames.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.profitsoft.videogames.dto.email.EmailDto;
 import dev.profitsoft.videogames.dto.game.*;
 import dev.profitsoft.videogames.entity.DeveloperEntity;
 import dev.profitsoft.videogames.entity.GameEntity;
@@ -12,7 +13,9 @@ import dev.profitsoft.videogames.mapper.GameMapper;
 import dev.profitsoft.videogames.repository.GameRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Validator;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
@@ -30,7 +33,7 @@ import java.util.List;
  * Service class for managing game-related operations.
  */
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class GameService {
 
     /**
@@ -38,12 +41,20 @@ public class GameService {
      * It specifies the filename of the attachment as "games.csv".
      */
     private static final String HEADER = "attachment; filename=games.csv";
+    private static final String EXAMPLE_EMAIL = "admin@example.com";
 
     private final GameRepository gameRepository;
     private final DeveloperService developerService;
     private final GameMapper gameMapper;
     private final ObjectMapper objectMapper;
     private final Validator validator;
+    private final RabbitTemplate rabbitTemplate;
+
+    @Value("${rabbit.exchangeName}")
+    private String exchangeName;
+
+    @Value("${rabbit.routingKey}")
+    private String routingKey;
 
     /**
      * Saves a new game in the database.
@@ -55,6 +66,10 @@ public class GameService {
     public GameUpdateDTO saveGame(GameUpdateDTO dto) {
         GameEntity gameEntity = createGameEntityFromDTO(dto);
         GameEntity savedGame = gameRepository.save(gameEntity);
+
+        EmailDto email = createEmail(savedGame);
+        rabbitTemplate.convertAndSend(exchangeName, routingKey, email);
+
         return gameMapper.toGameUpdateDTO(savedGame);
     }
 
@@ -211,5 +226,13 @@ public class GameService {
 
     private GameEntity getGameByIdOrThrow(Long id) {
         return gameRepository.findById(id).orElseThrow(() -> new GameNotFoundException("Game with id %d not found".formatted(id)));
+    }
+
+    private EmailDto createEmail(GameEntity savedGame) {
+        EmailDto email = new EmailDto();
+        email.setEmail(EXAMPLE_EMAIL);
+        email.setSubject("New Game Added");
+        email.setContent("New game with title %s added to system.".formatted(savedGame.getTitle()));
+        return email;
     }
 }

@@ -9,6 +9,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+  main:
+    allow-bean-definition-overriding: true
 server:
   error:
     include-message: always
@@ -17,3 +19,9 @@ server:
 springdoc:
   swagger-ui:
     path: /videogames-api-ui.html
+
+rabbit:
+  queueName: email-queue
+  routingKey: game.created
+  exchangeName: email-exchange
+
